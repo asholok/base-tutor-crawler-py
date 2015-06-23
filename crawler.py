@@ -5,7 +5,7 @@ import csv
 from bs4 import BeautifulSoup
 
 global_link = 'http://www.flohmarkt.at/nachhilfeboerse/index.php?start={}'
-paginator = 0
+STARTS_WITH = 0 # Advert number
 
 
 def get_phone(list_of_lines):
@@ -45,10 +45,11 @@ def parse_detail(detail_link):
     result['phone'] = get_phone(lines).encode('utf-8')
     result['city'] = get_city(lines).encode('utf-8') 
     result['email'] = get_email(lines).encode('utf-8')
+    
     return result
 
 def find_adverts(start_from):
-    response = urllib2.urlopen(global_link.format(str(paginator)))
+    response = urllib2.urlopen(global_link.format(str(start_from)))
     soup = BeautifulSoup(response.read())
     
     return soup.find_all('div',{'class': 'pMitte'})
@@ -85,12 +86,13 @@ def find_links(content):
     return advert_anchors
 
 def crowler():
-    global paginator
+    paginator = STARTS_WITH
     adverts = find_adverts(paginator)
     results = []
     
     while adverts:
         advert_anchors = find_links(adverts)
+        
         results.extend(collect_detail(advert_anchors))
         paginator += 20
         adverts = find_adverts(paginator)
