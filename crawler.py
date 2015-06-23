@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 
 global_link = 'http://www.flohmarkt.at/nachhilfeboerse/index.php?start={}'
 STARTS_WITH = 0 # Advert number
+ADVERTS_PER_PAGE = 20 # constante, look at the http://www.flohmarkt.at/nachhilfeboerse
 
 
 def get_phone(list_of_lines):
@@ -94,7 +95,7 @@ def crowler():
         advert_anchors = find_links(adverts)
         
         results.extend(collect_detail(advert_anchors))
-        paginator += 20
+        paginator += ADVERTS_PER_PAGE
         adverts = find_adverts(paginator)
     
     save_data(results)
