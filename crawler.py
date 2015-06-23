@@ -11,16 +11,16 @@ STARTS_WITH = 0 # Advert number
 def get_phone(list_of_lines):
     for line in list_of_lines:
         if 'Telefon:' in line:
-            phohe = re.sub('Telefon:','',line)
+            phohe = re.sub('Telefon:', '', line)
             
-            return re.sub('\t','',phohe) # \t takes one char in table 
+            return re.sub('\t', '', phohe) # \t takes one char in table 
     
     return 'N/A'
 
 def get_city(list_of_lines):
     for line in list_of_lines:
         if 'Standort:' in line:
-            return re.sub('Standort:','',line)
+            return re.sub('Standort:', '', line)
     
     return 'N/A'
 
