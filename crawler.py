@@ -48,8 +48,8 @@ def parse_detail(detail_link):
     
     return result
 
-def find_adverts(start_from):
-    response = urllib2.urlopen(global_link.format(str(start_from)))
+def find_adverts(paginator):
+    response = urllib2.urlopen(global_link.format(str(paginator)))
     soup = BeautifulSoup(response.read())
     
     return soup.find_all('div',{'class': 'pMitte'})
