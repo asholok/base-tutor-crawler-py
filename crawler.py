@@ -5,7 +5,7 @@ import csv
 from bs4 import BeautifulSoup
 
 global_link = 'http://www.flohmarkt.at/nachhilfeboerse/index.php?start={}'
-STARTS_WITH = 0 # Advert number
+STARTS_WITH = 1520 # Advert number
 ADVERTS_PER_PAGE = 20 # constante, look at the http://www.flohmarkt.at/nachhilfeboerse
 
 
@@ -39,7 +39,7 @@ def parse_detail(detail_link):
     result = {}
     response = urllib2.urlopen(detail_link)
     soup = BeautifulSoup(response.read())
-    style="margin:10px 0 0 0;background-color:#F5F8FB;padding:5px 5px 5px 15px;border:1px solid #CBDDED;font-size:13px;"
+    style = "margin:10px 0 0 0;background-color:#F5F8FB;padding:5px 5px 5px 15px;border:1px solid #CBDDED;font-size:13px;"
     divs = soup.find('div', {'style': style})
     lines = divs.get_text().split('\n')
 
@@ -92,11 +92,15 @@ def crowler():
     results = []
     
     while adverts:
-        advert_anchors = find_links(adverts)
-        
-        results.extend(collect_detail(advert_anchors))
-        paginator += ADVERTS_PER_PAGE
-        adverts = find_adverts(paginator)
+        try:
+            advert_anchors = find_links(adverts)
+            
+            results.extend(collect_detail(advert_anchors))
+        except urllib2.URLError, urllib2.HTTPError:
+            adverts = False
+        else:   
+            paginator += ADVERTS_PER_PAGE
+            adverts = find_adverts(paginator)
     
     save_data(results)
 
