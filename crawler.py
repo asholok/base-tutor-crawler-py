@@ -96,7 +96,7 @@ def crowler():
             advert_anchors = find_links(adverts)
             
             results.extend(collect_detail(advert_anchors))
-        except urllib2.URLError, urllib2.HTTPError:
+        except (urllib2.URLError, urllib2.HTTPError):
             adverts = False
         else:   
             paginator += ADVERTS_PER_PAGE
